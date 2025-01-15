@@ -36,6 +36,10 @@ def RunSentimentAnalysis():
     else:
         return f"Error: The result is not a list. Result: {result}"
 
+    # Task 7 Error handling: when the dominant_emotion is None
+    if response['dominant_emotion'] is None:
+        return f"Invallid text! Please try again!"
+
     # Format my response
     formatted_output = (
         f"For the given statement, the system response is "
