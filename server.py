@@ -1,8 +1,10 @@
-# Import the Flask class from the flask module
-from flask import Flask, render_template, request, make_response
+"""
+Import the Flask class from the flask module
+"""
+import json
+from flask import Flask, render_template, request # pylint: disable=import-error
 # Import the emotion_detector
 from EmotionDetection.emotion_detection import emotion_detector
-import json
 
 # Create an instance of the Flask class, passing in the name of the current module
 # app = Flask(__name__)
@@ -13,20 +15,25 @@ app = Flask("Emotion Detector")
 @app.route("/home")
 @app.route("/index")
 def home():
-    # return "Hello, World!"
+    """
+    This function implements the decorators for my home folder
+    """
     return render_template('index.html')
 
 @app.route("/emotionDetector")
-def RunSentimentAnalysis():
+def run_sentiment_analysis():
+    """
+    This function calls the emotion detector
+    """
     result = emotion_detector(request.args.get('textToAnalyze'))
-    
+
     # Debugging: Print out the result to see its structure
     # print(f"Result from emotion_detector: {result}")
-    
+
     # In case the result is a string, I need to parse it.
     if isinstance(result, str):
         try:
-            result = json.loads(result)  # Converting the string to a dictionary or list of dictionaries
+            result = json.loads(result)
         except json.JSONDecodeError:
             return f"Error: Could not parse the result string as JSON. Result: {result}"
 
@@ -38,7 +45,7 @@ def RunSentimentAnalysis():
 
     # Task 7 Error handling: when the dominant_emotion is None
     if response['dominant_emotion'] is None:
-        return f"Invallid text! Please try again!"
+        return "Invallid text! Please try again!"
 
     # Format my response
     formatted_output = (
